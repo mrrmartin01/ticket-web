@@ -62,7 +62,7 @@ export default function SearchBar({
                   <Input
                     placeholder={placeholder}
                     {...field}
-                    className="pl-10 h-12 border-2 border-zinc-700"
+                    className="pl-10 h-12 border border-zinc-700"
                   />
                 </div>
               </FormControl>

@@ -197,7 +197,7 @@ export function MobileNav() {
 
           <div className="flex flex-col space-y-2 mt-10">
             <Button variant="outline" asChild className="w-full rounded-2xl">
-              <Link href="/signup">Register</Link>
+              <Link href="/register">Register</Link>
             </Button>
             <Button asChild className="w-full rounded-2xl">
               <Link href="/login">Login</Link>
@@ -225,7 +225,7 @@ export const Navbar = () => {
 
       <div className="hidden md:flex space-x-2">
         <Button variant="outline" asChild className="rounded-2xl">
-          <Link href="/signup">Register</Link>
+          <Link href="/register">Register</Link>
         </Button>
         <Button asChild className="rounded-2xl">
           <Link href="/login">Login</Link>
