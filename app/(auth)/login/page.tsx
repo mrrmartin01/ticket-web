@@ -4,7 +4,6 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import {
   Form,
@@ -26,10 +25,13 @@ import { Input } from "@/components/ui/input";
 
 import { PasswordInput } from "@/components/ui/password-input";
 import { loginFormSchema } from "@/lib/validation-schemas";
+import { useSignin } from "@/hooks/auth";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = loginFormSchema;
 
 export default function LoginPreview() {
+  const { handleSignin, isLoading } = useSignin();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,16 +42,9 @@ export default function LoginPreview() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Assuming an async login function
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
+      handleSignin(values);
     } catch (error) {
       console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
     }
   }
 
@@ -103,16 +98,16 @@ export default function LoginPreview() {
                       </FormControl>
                       <FormMessage />
                       <Link
-                          href="/forgot-password"
-                          className="ml-auto inline-block text-sm underline"
-                        >
-                          Forgot your password?
-                        </Link>
+                        href="/forgot-password"
+                        className="ml-auto inline-block text-sm underline"
+                      >
+                        Forgot your password?
+                      </Link>
                     </FormItem>
                   )}
                 />
                 <Button type="submit" className="w-full">
-                  Login
+                  {isLoading ? <Spinner /> : "Login"}
                 </Button>
               </div>
             </form>

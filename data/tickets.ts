@@ -1,6 +1,7 @@
 export const tickets = [
   {
-    title: "Neon Nights Festival",
+    id: 1,
+    name: "Neon Nights Festival",
     description:
       "Experience an electrifying evening filled with music, lights, and unforgettable performances.",
     ticketsType: [
@@ -9,12 +10,13 @@ export const tickets = [
       { id: 3, name: "Balcony" },
     ],
     location: "Earth",
-    date: "14th March",
+    date: "14th March 2025",
     dateTooltip: "Event happening on 14th March 2025",
     imageSrc: "/test.avif",
   },
   {
-    title: "Tech Innovators Summit",
+    id: 2,
+    name: "Tech Innovators Summit",
     description:
       "A gathering of brilliant minds discussing the future of technology and innovation.",
     ticketsType: [
@@ -27,7 +29,8 @@ export const tickets = [
     imageSrc: "/test.avif",
   },
   {
-    title: "Cultural Fusion Expo",
+    id: 3,
+    name: "Cultural Fusion Expo",
     description:
       "Explore global cultures through food, art, fashion, and live performances throughout the day.",
     ticketsType: [
@@ -41,9 +44,10 @@ export const tickets = [
     imageSrc: "/test.avif",
   },
   {
-    title: "Champions Arena Match",
+    id: 4,
+    name: "Champions Arena Match",
     description:
-      "Watch top competitors battle for the grand title in an intense, high-energy showdown.",
+      "Watch top competitors battle for the grand name in an intense, high-energy showdown.",
     ticketsType: [
       { id: 1, name: "VIP" },
       { id: 2, name: "Ringside" },
@@ -55,7 +59,8 @@ export const tickets = [
     imageSrc: "/test.avif",
   },
   {
-    title: "Midnight Jazz Sessions",
+    id: 5,
+    name: "Midnight Jazz Sessions",
     description:
       "Immerse yourself in soulful jazz performances featuring world-class musicians.",
     ticketsType: [

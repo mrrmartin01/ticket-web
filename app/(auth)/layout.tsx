@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import "../(home)/globals.css";
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,11 +10,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`antialiased font-sans`}>
-        <main>{children}</main>
-      </body>
-    </html>
-  );
+  return <main>{children}</main>;
 }

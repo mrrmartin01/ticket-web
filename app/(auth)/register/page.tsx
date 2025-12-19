@@ -24,19 +24,20 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-
 import { registerFormSchema } from "@/lib/validation-schemas";
+import { useSignup } from "@/hooks/auth";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = registerFormSchema;
 
 export default function RegisterPreview() {
+  const { handleSignup, isLoading } = useSignup();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
-      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -44,16 +45,12 @@ export default function RegisterPreview() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Assuming an async registration function
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
+      const { confirmPassword: _confirmPassword, ...payload } = values;
+      void _confirmPassword;
+      console.log(payload);
+      handleSignup(payload);
     } catch (error) {
       console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
     }
   }
 
@@ -66,7 +63,13 @@ export default function RegisterPreview() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+              onSubmit={form.handleSubmit(onSubmit, (errors) => {
+                // Log validation errors so it's clear why onSubmit may not run
+                console.log("Validation errors:", errors);
+              })}
+              className="space-y-8"
+            >
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
@@ -157,9 +160,12 @@ export default function RegisterPreview() {
                     </FormItem>
                   )}
                 />
-
-                <Button type="submit" className="w-full cursor-pointer">
-                  Register
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full cursor-pointer"
+                >
+                  {isLoading ? <Spinner /> : "Register"}
                 </Button>
               </div>
             </form>
