@@ -4,11 +4,14 @@ import { toast } from "sonner";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useMakeBookingMutation } from "@/redux/services/booking/bookingApiSlice";
 import { MakeBookingRequest } from "@/types/booking";
+import { openPaymentPopup } from "./usePaymentPopup";
 
 export function useMakeBooking() {
-  const [makeBooking, { isLoading, isError }] = useMakeBookingMutation();
+  const [makeBooking, { isLoading, reset }] = useMakeBookingMutation();
 
   const handleMakeBooking = async (input: MakeBookingRequest) => {
+    reset(); // clear previous mutation state
+
     if (!input.items.length) {
       toast.error("Booking failed", {
         description: "Please select at least one ticket before continuing.",
@@ -20,7 +23,14 @@ export function useMakeBooking() {
       const res = await makeBooking(input).unwrap();
 
       toast.success("Booking created", {
-        description: "Your booking was created successfully. Please proceed to payment.",
+        description: "Complete payment in the popup to confirm.",
+      });
+      openPaymentPopup({
+        paymentUrl: res.paymentUrl,
+        bookingId: res.bookingId,
+        onComplete: () => {
+          // Optionally refresh booking data / Redux state here 
+        },
       });
 
       return res;
@@ -61,7 +71,39 @@ export function useMakeBooking() {
     }
   };
 
-  return { handleMakeBooking, isLoading, isError };
+  return { handleMakeBooking, isLoading };
 }
 
 export default useMakeBooking;
+
+// --------------------------
+// PostMessage listener
+// --------------------------
+function monitorPaymentCompletion({
+  bookingId,
+  paymentWindow,
+}: {
+  bookingId: string;
+  paymentWindow: Window;
+}) {
+  const listener = (event: MessageEvent) => {
+    // Security: ensure message comes from your domain
+    if (event.origin !== window.location.origin) return;
+
+    if (
+      event.data?.type === "PAYMENT_COMPLETE" &&
+      event.data.bookingId === bookingId
+    ) {
+      paymentWindow.close();
+      window.removeEventListener("message", listener);
+
+      toast.success("Payment completed", {
+        description: "Your booking has been confirmed.",
+      });
+
+      // Optionally refresh booking data / Redux state
+    }
+  };
+
+  window.addEventListener("message", listener);
+}

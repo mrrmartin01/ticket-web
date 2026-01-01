@@ -1,12 +1,10 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from "../baseQueryWithAuth";
-import { MakeBookingRequest } from "@/types/booking";
 
-export const BookingSlice = createApi({
-  reducerPath: "bookingApi",
-  baseQuery: baseQueryWithReauth,
+import { BookingResponse, MakeBookingRequest } from "@/types/booking";
+import { apiSlice } from "../apiSlice";
+
+export const BookingSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    makeBooking: builder.mutation<void, MakeBookingRequest>({
+    makeBooking: builder.mutation<BookingResponse, MakeBookingRequest>({
       query: (body) => ({
         url: "/booking",
         method: "POST",

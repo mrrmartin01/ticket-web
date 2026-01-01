@@ -1,10 +1,7 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from "../baseQueryWithAuth";
 import { EventDetails, EventResponse } from "@/types/events";
+import { apiSlice } from "../apiSlice";
 
-export const EventSlice = createApi({
-  reducerPath: "eventsApi",
-  baseQuery: baseQueryWithReauth,
+export const EventSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getEvents: builder.query<EventResponse, void>({
       query: () => ({

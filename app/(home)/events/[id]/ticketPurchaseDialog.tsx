@@ -147,6 +147,7 @@ export function TicketPurchaseDialog({
 
             <DialogFooter className="flex justify-between w-full flex-col sm:flex-row gap-2">
               <Button
+                className="cursor-pointer"
                 type="submit"
                 disabled={isLoading || ticket.quantityAvailable === 0}
               >
@@ -154,7 +155,11 @@ export function TicketPurchaseDialog({
               </Button>
 
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="cursor-pointer"
+                >
                   Close
                 </Button>
               </DialogClose>
