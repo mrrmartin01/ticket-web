@@ -4,15 +4,20 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useSigninMutation } from "@/redux/services/auth/authApiSlice";
+import { useAppDispatch } from "@/redux/reduxHook";
+import { setUser } from "@/redux/features/auth/authSlice";
 
 const useSignin = () => {
   const [signin, { isLoading }] = useSigninMutation();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handleSignin = async (data:{email: string, password: string}) => {
+  const handleSignin = async (data: { email: string; password: string }) => {
     const { email, password } = data;
     try {
-      await signin({ email, password }).unwrap();
+      const response = await signin({ email, password }).unwrap();
+
+      dispatch(setUser(response.user ?? response));
 
       toast("Welcome back!", {
         description: "You are now logged in.",

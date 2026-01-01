@@ -1,23 +1,22 @@
-
-import { logout } from "@/api/features/auth/authSlice";
-import { useAppDispatch } from "@/api/reduxHook";
-import { useSignoutMutation } from "@/api/services/auth/authApiSlice";
+import { clearUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/reduxHook";
+import { useSignoutMutation } from "@/redux/services/auth/authApiSlice";
 
 const useSignout = () => {
   const dispatch = useAppDispatch();
-  const [signout, {isLoading}] = useSignoutMutation();
+  const [signout, { isLoading }] = useSignoutMutation();
 
-    const handleSignout = async () => {
+  const handleSignout = async () => {
     try {
-      await signout({}).unwrap(); 
+      await signout({}).unwrap();
     } catch (err) {
       console.error("Logout failed", err);
     } finally {
-      dispatch(logout());
+      dispatch(clearUser());
     }
   };
 
-  return {handleSignout, isLoading}
-}
+  return { handleSignout, isLoading };
+};
 
 export default useSignout;

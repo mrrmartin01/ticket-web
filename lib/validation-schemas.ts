@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const emailSchema = z
-  .string()
   .email({ message: "Invalid email address" });
 
 export const passwordSchema = z
@@ -58,3 +57,10 @@ export const resetPasswordFormSchema = z
     path: ["confirmPassword"],
     message: "Passwords do not match",
   });
+
+  export const bookingSchema = (x: number) => z.object({
+     quantity: z
+    .number()
+    .min(1, "Minimum 1 ticket")
+    .max(x, "Maximum 20 tickets"),
+  })

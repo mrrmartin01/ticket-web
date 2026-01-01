@@ -18,6 +18,7 @@ export const EventSlice = createApi({
         method: "GET",
       }),
     }),
+    
   }),
 });
 

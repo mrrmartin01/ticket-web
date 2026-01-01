@@ -42,7 +42,7 @@ export default function LoginPreview() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      handleSignin(values);
+      await handleSignin(values);
     } catch (error) {
       console.error("Form submission error", error);
     }

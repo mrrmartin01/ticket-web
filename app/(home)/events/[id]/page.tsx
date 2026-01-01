@@ -36,7 +36,7 @@ const Page = () => {
   }
 
   if (!events) {
-    return <div className="p-10 text-center">Event not found.</div>;
+    return <div className="p-10 text-center">Event not found 😔.</div>;
   }
 
   // Safe calculations

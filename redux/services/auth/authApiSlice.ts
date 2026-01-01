@@ -1,5 +1,5 @@
+import { setUser } from "@/redux/features/auth/authSlice";
 import { apiSlice } from "../apiSlice";
-import { setAuth } from "@/redux/features/auth/authSlice";
 import { UserProfile } from "@/types/auth";
 
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -69,7 +69,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         );
         try {
           const { data: response } = await queryFulfilled;
-          dispatch(setAuth(response.user ?? response));
+          dispatch(setUser(response.user ?? response));
         } catch {
           patchResult.undo();
         }

@@ -1,50 +1,26 @@
-import { AppDispatch } from "../../store";
+import { AppDispatch } from "@/redux/store";
 import { apiSlice } from "@/redux/services/apiSlice";
-import { setAuth, finishInitialLoad, logout } from "./authSlice";
+import { setUser, clearUser } from "./authSlice";
 
-export const initAuth = () => async (dispatch: AppDispatch): Promise<void> => {
+export const initAuth = () => async (dispatch: AppDispatch) => {
   try {
-    // 1) Try to load profile directly (cheap check). If access cookie exists and valid, returns user.
-    const profileResp = await dispatch(
-      apiSlice.endpoints.getProfile.initiate(undefined)
+    const result = await dispatch(
+      apiSlice.endpoints.getProfile.initiate(undefined, {
+        forceRefetch: true,
+      })
     );
 
-    if ("data" in profileResp && profileResp.data) {
-      dispatch(setAuth({
-        ...profileResp.data,
-        role: profileResp.data.role ?? null,
-      }));
-      dispatch(finishInitialLoad());
-      // unsubscribe from cache subscription created by initiate
-      // (RTKQ returns a promise-like object that includes an `unsubscribe` method)
-      ;(profileResp as unknown as { unsubscribe?: () => void }).unsubscribe?.();
-      return;
+    if ("data" in result && result.data) {
+      dispatch(setUser(result.data));
+    } else {
+      dispatch(clearUser());
     }
 
-    // 2) If profile returned 401, baseQueryWithReauth will try one refresh (mutex-protected).
-    // We re-run the profile to let that refresh attempt and then re-check.
-    const profileRetry = await dispatch(
-      apiSlice.endpoints.getProfile.initiate(undefined)
-    );
-
-    if ("data" in profileRetry && profileRetry.data) {
-      dispatch(
-        setAuth({
-          ...profileRetry.data,
-          role: profileRetry.data.role ?? null,
-        })
-      );
-      dispatch(finishInitialLoad());
-      ;(profileRetry as unknown as { unsubscribe?: () => void }).unsubscribe?.();
-      return;
+    if ("unsubscribe" in result && typeof result.unsubscribe === "function") {
+      result.unsubscribe();
     }
-
-    // No user — mark initial load finished (unauthenticated)
-    dispatch(finishInitialLoad());
-    dispatch(logout());
-
   } catch (err) {
-    console.error("Unexpected error during auth init", err);
-    dispatch(finishInitialLoad());
+    console.error("Auth bootstrap failed", err);
+    dispatch(clearUser());
   }
 };

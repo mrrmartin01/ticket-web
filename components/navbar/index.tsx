@@ -35,6 +35,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { IconChevronDown } from "@tabler/icons-react";
 import { maskEmail } from "@/lib/emailMask";
+import { useSignout } from "@/hooks/auth";
 
 const eventCategories = [
   {
@@ -174,7 +175,7 @@ ListItem.displayName = "ListItem";
 
 /* ----- Mobile Navigation ----- */
 export function MobileNav() {
-  const { isAuthenticated, isLoading, user } = useAppSelector(
+  const { user, isAuthInitialized } = useAppSelector(
     (state) => state.auth
   );
   return (
@@ -209,18 +210,21 @@ export function MobileNav() {
             linkKey="href"
           />
 
-          <Link href="/about" className="hover:underline text-sm text-muted-foreground hover:text-foreground border-b pb-4">
+          <Link
+            href="/about"
+            className="hover:underline text-sm text-muted-foreground hover:text-foreground border-b pb-4"
+          >
             About
           </Link>
 
-          {!isLoading && isAuthenticated && user && (
+          {isAuthInitialized && user && (
             <MobileSection
               title="Porfile"
               items={loggedInMenuItems}
               linkKey="href"
             />
           )}
-          {!isLoading && !isAuthenticated && (
+          {!isAuthInitialized && (
             <div className="flex flex-col space-y-2 mt-10">
               <Button variant="outline" asChild className="w-full rounded-2xl">
                 <Link href="/register">Register</Link>
@@ -260,9 +264,12 @@ function MobileSection<T extends { title: string }>(props: {
 
 /* ----- Navbar ----- */
 export const Navbar = () => {
-  const { isAuthenticated, isLoading, user } = useAppSelector(
-    (state) => state.auth
-  );
+const { user, isAuthInitialized } = useAppSelector(
+  (state) => state.auth
+);
+  const { handleSignout, isLoading: isSigningOut } = useSignout();
+    if (!isAuthInitialized) return null;
+
 
   return (
     <div className="sticky top-0 z-9999 w-full flex justify-between items-center py-2 bg-white border-b px-4 md:px-8">
@@ -276,7 +283,7 @@ export const Navbar = () => {
       <Nav />
       <MobileNav />
 
-      {!isLoading && !isAuthenticated && (
+      {!user && (
         <div className="hidden md:flex space-x-2">
           <Button variant="outline" asChild className="rounded-2xl">
             <Link href="/register">Register</Link>
@@ -286,7 +293,7 @@ export const Navbar = () => {
           </Button>
         </div>
       )}
-      {!isLoading && isAuthenticated && user && (
+      {isAuthInitialized && user && (
         <div className="hidden md:flex space-x-4 items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -337,10 +344,11 @@ export const Navbar = () => {
               <DropdownMenuSeparator />
 
               <Button
+                onClick={handleSignout}
                 variant="ghost"
-                className=" w-full bg-zinc-100 text-red-600 hover:text-red-500 shadow shadow-zinc-300 hover:shadow-red-300 transform-all duration-700"
+                className=" w-full cursor-pointer bg-zinc-100 text-red-600 hover:text-red-500 shadow shadow-zinc-300 hover:shadow-red-300 transform-all duration-700"
               >
-                Logout
+                {isSigningOut ? "Signing out..." : "Logout"}
               </Button>
             </DropdownMenuContent>
           </DropdownMenu>
