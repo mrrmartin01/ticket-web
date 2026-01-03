@@ -1,4 +1,3 @@
-
 import { BookingResponse, MakeBookingRequest } from "@/types/booking";
 import { apiSlice } from "../apiSlice";
 
@@ -11,7 +10,15 @@ export const BookingSlice = apiSlice.injectEndpoints({
         body,
       }),
     }),
+    verifyPayment: builder.query<boolean, string>({
+      query: (bookingId) => {
+        if (!bookingId) {
+          throw new Error("verifyPayment called without bookingId");
+        }
+        return `/payment/callback/${bookingId}`;
+      },
+    }),
   }),
 });
 
-export const { useMakeBookingMutation } = BookingSlice;
+export const { useMakeBookingMutation, useVerifyPaymentQuery } = BookingSlice;
