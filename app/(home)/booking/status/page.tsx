@@ -12,8 +12,7 @@ const BookingStatus = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const reference =
-    searchParams.get("reference") ?? searchParams.get("trxref");
+  const reference = searchParams.get("trxref");
 
   if (!reference) {
     throw new Error("Payment reference is missing from query params");
@@ -38,7 +37,7 @@ const BookingStatus = () => {
     );
   }
 
-  if (isError || !data?.confirmed) {
+  if (data?.status === "FAILED" || isError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 text-red-600">
         <IconX className="text-6xl mb-4" />
@@ -57,7 +56,7 @@ const BookingStatus = () => {
           </button>
           <button
             onClick={handleViewBooking}
-            disabled={!data?.bookingId}
+            disabled={!data}
             className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
           >
             View Booking
