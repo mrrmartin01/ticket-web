@@ -146,13 +146,13 @@ export function TicketPurchaseDialog({
             />
 
             <DialogFooter className="flex justify-between w-full flex-col sm:flex-row gap-2">
-              <Button
-                className="cursor-pointer"
-                type="submit"
-                disabled={isLoading || ticket.quantityAvailable === 0}
-              >
-                {isLoading ? "Processing..." : "Proceed to payment"}
-              </Button>
+                <Button
+                  className="cursor-pointer"
+                  type="submit"
+                  disabled={isLoading || ticket.quantityAvailable === 0}
+                >
+                  {isLoading ? "Processing..." : "Proceed to payment"}
+                </Button>
 
               <DialogClose asChild>
                 <Button

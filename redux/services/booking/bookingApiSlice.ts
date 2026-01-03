@@ -1,5 +1,8 @@
-
-import { BookingResponse, MakeBookingRequest } from "@/types/booking";
+import {
+  BookingResponse,
+  MakeBookingRequest,
+  VerifyPaymentResponse,
+} from "@/types/booking";
 import { apiSlice } from "../apiSlice";
 
 export const BookingSlice = apiSlice.injectEndpoints({
@@ -11,7 +14,15 @@ export const BookingSlice = apiSlice.injectEndpoints({
         body,
       }),
     }),
+    verifyPayment: builder.query<VerifyPaymentResponse, string>({
+      query: (bookingId) => {
+        if (!bookingId) {
+          throw new Error("verifyPayment called without bookingId");
+        }
+        return `/payment/callback?trxref=${bookingId}`;
+      },
+    }),
   }),
 });
 
-export const { useMakeBookingMutation } = BookingSlice;
+export const { useMakeBookingMutation, useVerifyPaymentQuery } = BookingSlice;
