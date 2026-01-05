@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useVerifyPaymentQuery } from "@/redux/services/booking/bookingApiSlice";
 import { IconCheck, IconX, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { QrCode } from "@/lib/qrcodeGenerator";
 
 const BookingStatus = () => {
   const router = useRouter();
@@ -67,6 +68,8 @@ const BookingStatus = () => {
         Your booking is confirmed. You will receive a confirmation email
         shortly.
       </p>
+      {data?.reference && <QrCode data={data.reference} />}
+
       <div className="mt-6 flex gap-4">
         <Button onClick={handleGoHome}>Go to Home</Button>
         <Button onClick={handleViewBooking} variant="outline" disabled={!data}>
