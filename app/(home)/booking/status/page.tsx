@@ -19,7 +19,7 @@ const BookingStatus = () => {
   const { data, isLoading, isError } = useVerifyPaymentQuery(reference);
 
   const handleGoHome = () => router.push("/");
-  const handleViewBooking = () => router.push(`/booking/${data ?? ""}`);
+  const handleViewBooking = () => router.push(`/booking/${data?.booking?.id ?? ""}`);
 
   if (isLoading) {
     return (
