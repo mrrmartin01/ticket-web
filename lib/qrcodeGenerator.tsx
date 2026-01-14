@@ -5,9 +5,11 @@ import QRCode from 'qrcode';
 
 type Props = {
   data: string;
+  height: number;
+  width: number;
 };
 
-export function QrCode({ data }: Props) {
+export function QrCode({ data, height= 200, width= 200}: Props) {
   const [svg, setSvg] = useState<string>('');
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export function QrCode({ data }: Props) {
   return (
     <div
       aria-label="QR Code"
-      style={{ width: 200, height: 200 }}
+      style={{ width: width, height: height }}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );
