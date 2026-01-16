@@ -22,7 +22,19 @@ export const BookingSlice = apiSlice.injectEndpoints({
         return `/payment/callback?trxref=${bookingId}`;
       },
     }),
+    getBookingById: builder.query<BookingResponse, string>({
+      query: (bookingId) => {
+        if (!bookingId) {
+          throw new Error("getBooking called without bookingId");
+        }
+        return `/booking/${bookingId}`;
+      },
+    }),
   }),
 });
 
-export const { useMakeBookingMutation, useVerifyPaymentQuery } = BookingSlice;
+export const {
+  useMakeBookingMutation,
+  useVerifyPaymentQuery,
+  useGetBookingByIdQuery,
+} = BookingSlice;
