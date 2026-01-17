@@ -5,8 +5,8 @@ import QRCode from 'qrcode';
 
 type Props = {
   data: string;
-  height: number;
-  width: number;
+  height?: number;
+  width?: number;
 };
 
 export function QrCode({ data, height= 200, width= 200}: Props) {

@@ -6,7 +6,7 @@ const useGetBookingById = ({bookingId}:{bookingId: string}) => {
     isLoading,
     isError,
     refetch,
-  } = useGetBookingByIdQuery(bookingId);
+  } = useGetBookingByIdQuery(bookingId); 
 
   return {
     booking: data,

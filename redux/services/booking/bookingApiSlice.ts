@@ -2,6 +2,7 @@ import {
   BookingResponse,
   MakeBookingRequest,
   VerifyPaymentResponse,
+  Booking
 } from "@/types/booking";
 import { apiSlice } from "../apiSlice";
 
@@ -22,7 +23,7 @@ export const BookingSlice = apiSlice.injectEndpoints({
         return `/payment/callback?trxref=${bookingId}`;
       },
     }),
-    getBookingById: builder.query<BookingResponse, string>({
+    getBookingById: builder.query<Booking, string>({
       query: (bookingId) => {
         if (!bookingId) {
           throw new Error("getBooking called without bookingId");
